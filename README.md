@@ -1,5 +1,5 @@
 # todo-crud-in-reactJs-with-array-of-objects
-run commands
+run these commands:
 
 npm install -g json-server
 
