@@ -1,4 +1,4 @@
-# todo-crud-in-reactJs-with-array-of-objects
+# todo-crud-in-reactJs-with-restApi
 run these commands:
 
 npm install -g json-server
