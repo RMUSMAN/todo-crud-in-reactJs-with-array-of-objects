@@ -4,6 +4,9 @@ import Create from "../components/todos/create";
 import Update from "../components/todos/update";
 import TodoList from "../components/todos/TodoList";
 import axios from "axios";
+
+// We Should put our credentials in ENV or make a variable to write it once
+const SERVER_URL = "http://localhost:3000/todos";
 class Todos extends React.Component {
   constructor(props) {
     super(props);
@@ -13,7 +16,7 @@ class Todos extends React.Component {
       task: "",
       edit: false,
       add: true,
-      error: false
+      error: false,
     };
     this.addTodos = this.addTodos.bind(this);
     this.deleteHandler = this.deleteHandler.bind(this);
@@ -21,49 +24,49 @@ class Todos extends React.Component {
     this.editHandler = this.editHandler.bind(this);
     this.updateHandler = this.updateHandler.bind(this);
   }
-  // constructer end
+  // constructor end
   componentDidMount() {
     this.updateTodos();
   }
 
   updateTodos() {
-    axios.get("http://localhost:3000/todos").then(response => {
+    axios.get(`${SERVER_URL}`).then((response) => {
       this.setState({
-        todos: response.data
+        todos: response.data,
       });
     });
   }
   changeHandler(e) {
     this.setState({
       task: e.target.value,
-      error: false
+      error: false,
     });
   }
   editHandler(id) {
     var array = [...this.state.todos];
-    var index = array.findIndex(x => x.id === id);
+    var index = array.findIndex((x) => x.id === id);
     this.setState({
       id: array[index].id,
       task: array[index].task,
-      edit: true
+      edit: true,
     });
   }
 
   updateHandler() {
     if (this.state.task === "") {
       this.setState({
-        error: true
+        error: true,
       });
     } else {
       var id = this.state.id;
       var task = this.state.task;
       var obj = { id: id, task: task };
-      axios.put("http://localhost:3000/todos/" + id, obj).then(response => {
+      axios.put(`${SERVER_URL}/${id}`, obj).then((response) => {
         console.log(response);
         this.setState({
           id: "",
           task: "",
-          edit: false
+          edit: false,
         });
         this.updateTodos();
       });
@@ -72,24 +75,24 @@ class Todos extends React.Component {
   addTodos() {
     if (this.state.task === "") {
       this.setState({
-        error: true
+        error: true,
       });
     } else {
       var array = [...this.state.todos];
       var task = this.state.task;
       var len = array.length;
       var obj = { id: len + 1, task: task };
-      axios.post("http://localhost:3000/todos", obj).then(response => {
+      axios.post(`${SERVER_URL}`, obj).then((response) => {
         this.setState({
           todos: response.data,
-          task: ""
+          task: "",
         });
         this.updateTodos();
       });
     }
   }
   deleteHandler(id) {
-    axios.delete("http://localhost:3000/todos/" + id).then(response => {
+    axios.delete(`${SERVER_URL}/${id}`).then((response) => {
       console.log(response);
       this.updateTodos();
     });
